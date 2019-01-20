@@ -17,9 +17,9 @@
 
 7z x -y windows_package.7z
 
-$env:MXNET_HOME=[io.path]::combine($PSScriptRoot, 'mxnet_home')
-$env:JULIA_URL="https://julialang-s3.julialang.org/bin/winnt/x64/0.7/julia-0.7.0-win64.exe"
-$env:JULIA_DEPOT_PATH=[io.path]::combine($PSScriptRoot, 'julia-depot')
+$env:MXNET_HOME = [io.path]::combine($PSScriptRoot, 'mxnet_home')
+$env:JULIA_URL = "https://julialang-s3.julialang.org/bin/winnt/x64/0.7/julia-0.7.0-win64.exe"
+$env:JULIA_DEPOT_PATH = [io.path]::combine($PSScriptRoot, 'julia-depot')
 
 $JULIA_DIR = [System.IO.Path]::GetFullPath(".\julia07")
 $JULIA = "$JULIA_DIR\bin\julia"
@@ -34,9 +34,15 @@ Start-Process -Wait "julia-binary.exe" -ArgumentList "/S /D=$JULIA_DIR"
 if (! $?) { Throw ("Error on installing Julia") }
 
 C:\julia07\julia\bin\julia -e "using InteractiveUtils; versioninfo()"
+
+# Pkg.add a dummy package to workaround Pkg3's bug
+echo 'using Pkg; Pkg.add("Example")' | & $JULIA
+
 echo 'using Pkg; Pkg.develop(PackageSpec(name = "MXNet", path = "julia"))' | & $JULIA
 if (! $?) { Throw ("Error on installing MXNet") }
+
 echo 'using Pkg; Pkg.build("MXNet")' | & $JULIA
 if (! $?) { Throw ("Error on building MXNet") }
+
 echo 'using Pkg; Pkg.test("MXNet")' | & $JULIA
 if (! $?) { Throw ("Error on testing") }
