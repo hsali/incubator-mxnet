@@ -34,9 +34,9 @@ Start-Process -Wait "$JULIA_DIR\julia-binary.exe" -ArgumentList "/S /D=$JULIA_DI
 if (! $?) { Throw ("Error on installing Julia") }
 
 C:\julia07\julia\bin\julia -e "using InteractiveUtils; versioninfo()"
-echo 'using Pkg; Pkg.develop(PackageSpec(name = "MXNet", path = "julia"))' | $JULIA
+echo 'using Pkg; Pkg.develop(PackageSpec(name = "MXNet", path = "julia"))' | & $JULIA
 if (! $?) { Throw ("Error on installing MXNet") }
-echo 'using Pkg; Pkg.build("MXNet")' | $JULIA
+echo 'using Pkg; Pkg.build("MXNet")' | & $JULIA
 if (! $?) { Throw ("Error on building MXNet") }
-echo 'using Pkg; Pkg.test("MXNet")' | $JULIA
+echo 'using Pkg; Pkg.test("MXNet")' | & $JULIA
 if (! $?) { Throw ("Error on testing") }
