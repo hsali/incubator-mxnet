@@ -38,6 +38,7 @@ C:\julia07\julia\bin\julia -e "using InteractiveUtils; versioninfo()"
 # Pkg.add a dummy package to workaround Pkg3's bug
 echo 'using Pkg; Pkg.add("Example")' | & $JULIA
 
+pwd
 echo 'using Pkg; Pkg.develop(PackageSpec(name = "MXNet", path = "julia"))' | & $JULIA
 if (! $?) { Throw ("Error on installing MXNet") }
 
